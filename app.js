@@ -1,6 +1,6 @@
 import express from 'express';
 import { db } from './database.js';
-import userRoutes from './routes/users.js'; // Import the users route
+import userRoutes from './routes/users.js';
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON request bodies
