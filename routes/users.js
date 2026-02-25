@@ -1,13 +1,13 @@
 import express from 'express';
-import { verifyAPIKey, verifyJWT } from '../middleware/auth.js';
+import { verifyJWT } from '../middleware/auth.js';
+import * as UsersController from '../controllers/usersController.js';
 
 const router = express.Router();
 
-// Protected route (API Key + JWT)
-router.get('/protected', verifyAPIKey, verifyJWT, (req, res) => {
-  res.status(200).json({
-    message: `Welcome ${req.user.username}, you have access to this protected route!`,
-  });
-});
+// GET all users
+router.get('/', verifyJWT, UsersController.getAllUsers);
+
+// GET a single user by ID
+router.get('/:id', verifyJWT, UsersController.getUserById);
 
 export default router;

@@ -13,20 +13,10 @@ app.use(helmet());
 app.use(express.json());
 app.disable('x-powered-by');
 
-// Test database connection
-(async () => {
-  try {
-    const connection = await db.getConnection();
-    console.log('Database connected successfully!');
-    connection.release(); // Release the connection back to the pool
-  } catch (error) {
-    console.error('Database connection failed:', error.message);
-  }
-})();
-
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/users', userRoutes);
 
 // Start server
 const PORT = process.env.PORT || 3000;
