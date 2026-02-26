@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friday Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #333;
+    }
+    .friday {
+      color: white;
+      background-color: gold;
+      padding: 20px;
+      border-radius: 10px;
+      animation: rainbow 1s infinite alternate;
+    }
+    @keyframes rainbow {
+      0% { background-color: red; }
+      20% { background-color: orange; }
+      40% { background-color: yellow; }
+      60% { background-color: green; }
+      80% { background-color: blue; }
+      100% { background-color: violet; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Today is <%= date %></h1>
+
+  <% if (isFriday) { %>
+    <div class="friday">
+      <h2>🎉 IT'S FRIDAY! 🎉</h2>
+      <p>Time to celebrate! Enjoy your weekend!</p>
+      <img src="https://media.giphy.com/media/l0MYC0LajbaPoEADu/giphy.gif" alt="Friday Party" />
+    </div>
+  <% } else { %>
+    <h2>It's not Friday yet. Hang in there!</h2>
+    <p>Come back on Friday for some fun!</p>
+  <% } %>
+</body>
+</html>
