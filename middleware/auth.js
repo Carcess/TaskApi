@@ -33,6 +33,6 @@ export const verifyJWT = (req, res, next) => {
     }
 
     req.user = decoded; // Lägger till den avkodade användarinformationen i request-objektet
-    next(); // Fortsätt till nästa middleware eller route om vi lägger till en till
+    next();
   });
 };

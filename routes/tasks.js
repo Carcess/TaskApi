@@ -29,15 +29,15 @@ router.get('/friday', (req, res) => {
   });
 });
 
-// Show all tasks (new route)
+// Show all tasks
 router.get('/all', async (req, res) => {
   const tasks = await getAllTasks();
-  res.render('tasks', { tasks }); // Render tasks page with the list of tasks
+  res.render('tasks', { tasks });
 });
 
-// Route to render the "Create New Task" form
+// Route to render the create New Task form
 router.get('/create', (req, res) => {
-  res.render('createTask'); // Render the form for creating a new task
+  res.render('createTask');
 });
 
 // Route to handle creating a new task

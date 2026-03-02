@@ -9,21 +9,29 @@ import session from 'express-session';
 import flash from 'connect-flash';
 
 dotenv.config();
-const app = express(); // Skapar en ny Express-applikation
+const app = express();
 
-app.use(express.urlencoded({ extended: true })); // To parse form data
+// Helps the app understand data sent from forms (like text boxes)
+app.use(express.urlencoded({ extended: true }));
 
-// Middleware
-app.use(helmet()); // Använder Helmet för att säkra HTTP-headers
-app.use(express.json()); // Gör det möjligt för applikationen att hantera JSON-data i inkommande förfrågningar
-app.disable('x-powered-by'); // Döljer information om att servern körs på Express för att öka säkerheten
+
+// Adds extra security to the app by setting safe HTTP headers
+app.use(helmet());
+
+// Lets the app understand JSON data sent in requests
+app.use(express.json());
+
+// Hides the "X-Powered-By: Express" header to make the app more secure
+app.disable('x-powered-by');
+
 
 // Middleware for sessions
+// Keeps track of tasks while they use the website
 app.use(
   session({
     secret: 'your-secret-key',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: true, // Save a new session even if it's empty
   })
 );
 
@@ -36,12 +44,12 @@ app.use((req, res, next) => {
   next();
 });
 
-// Set EJS as the template engine
+// Use EJS to make HTML pages look nice
 app.set('view engine', 'ejs');
-// Set the directory where EJS files will be located
+// Tell the app where to find the HTML (EJS) files
 app.set('views', './views');
 
-// Routes
+// Routes for the labs
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/tasks', taskRoutes);

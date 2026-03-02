@@ -2,36 +2,38 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import { verifyAPIKey } from '../middleware/auth.js'; // Import the API key middleware
 
-dotenv.config(); // Laddar miljövariabler från .env-filen
-const router = express.Router(); // Skapar en ny router-instans för att definiera routes
+dotenv.config(); // Load environment variables
 
-// Hårdkodad användare med hashat lösenord
+const router = express.Router(); // Create a new router instance
+
+// Hardcoded user with hashed password (for testing purposes)
 const user = { 
-  username: 'doe', // Användarnamn
-  password: await bcrypt.hash('doe', 10), // Hashar lösenordet "doe" med 10 saltomgångar
+  username: 'doe', 
+  password: await bcrypt.hash('doe', 10), // Hashed password
 };
 
-// inloggningsroute
-router.post('/login', async (req, res) => {
-  const { username, password } = req.body; // Hämtar användarnamn och lösenord från request-body
+// Login route with API key verification middleware
+router.post('/login', verifyAPIKey, async (req, res) => {
+  const { username, password } = req.body; // Extract username and password from request body
 
-  // Kontrollerar om användarnamnet matchar den hårdkodade användaren
+  // Check if the username matches the hardcoded user
   if (username !== user.username) {
-    return res.status(404).json({ error: 'Användare hittades inte' }); // Returnerar fel om användaren inte finns
+    return res.status(404).json({ error: 'Användare hittades inte' }); // User not found
   }
 
-  // Jämför det angivna lösenordet med det hashade lösenordet
+  // Compare the provided password with the hashed password
   const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) {
-    return res.status(401).json({ error: 'Ogiltiga inloggningsuppgifter' }); // Returnerar fel om lösenordet är fel
+    return res.status(401).json({ error: 'Ogiltiga inloggningsuppgifter' }); // Invalid credentials
   }
 
-  // Skapar en JWT-token med användarnamnet som payload och en giltighetstid på 1 timme
+  // Generate a JWT token
   const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-  // Skickar tillbaka token som svar
+  // Send the token back as the response
   res.status(200).json({ token });
 });
 
-export default router; // Exporterar routern så att den kan användas i andra delar av applikationen
+export default router;
