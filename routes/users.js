@@ -10,4 +10,9 @@ router.get('/', verifyJWT, UsersController.getAllUsers);
 // Route för att hämta en specifik användare baserat på ID (skyddad med JWT-verifiering)
 router.get('/:id', verifyJWT, UsersController.getUserById);
 
+// Route för att skapa en ny användare (skyddad med JWT-verifiering)
+router.post('/', verifyJWT, UsersController.createUser);
+
+
+
 export default router; // Exporterar routern så att den kan användas i andra delar av applikationen

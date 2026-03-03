@@ -2,13 +2,13 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
-import { verifyAPIKey } from '../middleware/auth.js'; // Import the API key middleware
+import { verifyAPIKey } from '../middleware/auth.js';
 
-dotenv.config(); // Load environment variables
+dotenv.config();
 
 const router = express.Router(); // Create a new router instance
 
-// Hardcoded user with hashed password (for testing purposes)
+// Hardcoded user with hashed password
 const user = { 
   username: 'doe', 
   password: await bcrypt.hash('doe', 10), // Hashed password
@@ -20,13 +20,13 @@ router.post('/login', verifyAPIKey, async (req, res) => {
 
   // Check if the username matches the hardcoded user
   if (username !== user.username) {
-    return res.status(404).json({ error: 'Användare hittades inte' }); // User not found
+    return res.status(404).json({ error: 'Användare hittades inte' });
   }
 
   // Compare the provided password with the hashed password
   const isValidPassword = await bcrypt.compare(password, user.password);
   if (!isValidPassword) {
-    return res.status(401).json({ error: 'Ogiltiga inloggningsuppgifter' }); // Invalid credentials
+    return res.status(401).json({ error: 'Ogiltiga inloggningsuppgifter' });
   }
 
   // Generate a JWT token

@@ -10,7 +10,7 @@ export const verifyAPIKey = (req, res, next) => {
 
   // Kontrollerar om API-nyckeln saknas eller är ogiltig
   if (!apiKey || apiKey !== process.env.API_KEY) {
-    return res.status(401).json({ error: 'Unauthorized: Invalid API key' }); // Returnerar ett fel om nyckeln är ogiltig
+    return res.status(401).json({ error: 'Unauthorized: Invalid API key' });
   }
 
   next(); // Om API-nyckeln är korrekt, fortsätt till nästa middleware
