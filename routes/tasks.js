@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-// Example route for tasks
+//Route for tasks
 router.get('/', (req, res) => {
   res.render('index');
 });
