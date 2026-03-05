@@ -124,8 +124,6 @@ router.get('/:id/json', async (req, res) => {
   }
 });
 
-
-
 // Render form to edit a task
 router.get('/edit/:id', async (req, res) => {
   const task = await getTaskById(req.params.id);
@@ -149,6 +147,46 @@ router.post('/edit/:id', async (req, res) => {
 });
 
 
+// Fetch task details for editing (JSON response)
+router.get('/edit/:id/json', async (req, res) => {
+  try {
+    const task = await getTaskById(req.params.id); // Fetch the task by ID
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' }); // Return 404 if task doesn't exist
+    }
+    res.json(task); // Return the task details as JSON
+  } catch (error) {
+    console.error('Error fetching task:', error); // Log the error for debugging
+    res.status(500).json({ error: 'An error occurred while fetching the task.' }); // Return a generic error message
+  }
+});
+
+// Update a task (JSON response)
+router.put('/edit/:id/json', async (req, res) => {
+  const { title, description, status } = req.body; // Extract updated task details from the request body
+  try {
+    const task = await getTaskById(req.params.id); // Check if the task exists
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' }); // Return 404 if task doesn't exist
+    }
+
+    await updateTask(req.params.id, title, description, status); // Update the task in the database
+    res.json({
+      message: 'Task updated successfully!',
+      task: {
+        id: req.params.id,
+        title,
+        description,
+        status,
+      },
+    }); // Respond with the updated task details
+  } catch (error) {
+    console.error('Error updating task:', error); // Log the error for debugging
+    res.status(500).json({ error: 'Failed to update task.' }); // Return a generic error message
+  }
+});
+
+
 // Delete a task
 router.post('/delete/:id', async (req, res) => {
   try {
@@ -160,6 +198,23 @@ router.post('/delete/:id', async (req, res) => {
   }
   res.redirect('/tasks/all');
 });
+
+// Delete a task (JSON response)
+router.delete('/delete/:id/json', async (req, res) => {
+  try {
+    const task = await getTaskById(req.params.id); // Check if the task exists
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' }); // Return 404 if task doesn't exist
+    }
+
+    await deleteTask(req.params.id); // Delete the task
+    res.json({ message: 'Task deleted successfully!' }); // Respond with a success message
+  } catch (error) {
+    console.error('Error deleting task:', error); // Log the error for debugging
+    res.status(500).json({ error: 'Failed to delete task.' }); // Return a generic error message
+  }
+});
+
 
 
 
