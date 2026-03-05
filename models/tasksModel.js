@@ -9,7 +9,7 @@ export const getAllTasks = async () => {
 // Get a single task by ID
 export const getTaskById = async (id) => {
   const [rows] = await db.query('SELECT * FROM tasks WHERE id = ?', [id]);
-  return rows[0]; // Return the first row (task) if it exists
+  return rows[0];
 };
 
 
@@ -19,7 +19,7 @@ export const createTask = async (title, description, status = 'pending') => {
     'INSERT INTO tasks (title, description, status) VALUES (?, ?, ?)',
     [title, description, status]
   );
-  return result.insertId; // Return the ID of the newly created task
+  return result.insertId;
 };
 
 export const updateTask = async (id, title, description, status) => {

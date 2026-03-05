@@ -4,7 +4,6 @@ import { createUser as createUserModel } from '../models/usersModel.js';
 // Funktion för att hämta alla användare
 export const getAllUsers = async (req, res) => {
   try {
-    // Hämtar alla användare från modellen (databasen)
     const users = await UsersModel.getAllUsers();
     res.json(users);
   } catch (error) {
@@ -15,7 +14,6 @@ export const getAllUsers = async (req, res) => {
 // Funktion för att hämta en specifik användare baserat på ID
 export const getUserById = async (req, res) => {
   try {
-    // Hämtar användaren med det ID som skickats i URL:en
     const user = await UsersModel.getUserById(req.params.id);
     if (!user) {
       return res.status(404).json({ error: 'Användare hittades inte' });
@@ -52,10 +50,7 @@ export const createUser = async (req, res) => {
 // Funktion för att uppdatera en befintlig användare
 export const updateUser = async (req, res) => {
   try {
-    // Hämtar nya värden för användarnamn, lösenord och e-post från request-body
     const { username, password, email } = req.body;
-
-    // Uppdaterar användaren i databasen baserat på ID som skickats i URL:en
     const updated = await UsersModel.updateUser(req.params.id, username, password, email);
 
     if (!updated) {
@@ -74,7 +69,6 @@ export const updateUser = async (req, res) => {
 // Funktion för att ta bort en användare
 export const deleteUser = async (req, res) => {
   try {
-    // Tar bort användaren med det ID som skickats i URL:en
     const deleted = await UsersModel.deleteUser(req.params.id);
 
     if (!deleted) {

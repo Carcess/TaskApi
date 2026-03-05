@@ -29,11 +29,39 @@ router.get('/friday', (req, res) => {
   });
 });
 
+// Get Route for /tasks/search
+router.get('/tasks/search', (req, res) => {
+  const queryDate = req.query.date;
+  if (queryDate) {
+    return res.redirect(`/friday?date=${queryDate}`);
+  }
+  res.status(400).send('Please provide a date in the format YYYY-MM-DD');
+});
+
+
 // Show all tasks
 router.get('/all', async (req, res) => {
   const tasks = await getAllTasks();
   res.render('tasks', { tasks });
 });
+
+router.get('/all/json', async (req, res) => {
+  try {
+    const tasks = await getAllTasks();
+    res.json(tasks);
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ error: 'An error occurred while fetching tasks.' });
+  }
+});
+
+
+/* Funktion för att hämta alla användare
+export const getAllTasks = async () => {
+  const [tasks] = await db.query('SELECT * FROM tasks');
+  return tasks;
+};
+*/
 
 // Route to render the create New Task form
 router.get('/create', (req, res) => {
