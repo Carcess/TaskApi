@@ -55,14 +55,6 @@ router.get('/all/json', async (req, res) => {
   }
 });
 
-
-/* Funktion för att hämta alla användare
-export const getAllTasks = async () => {
-  const [tasks] = await db.query('SELECT * FROM tasks');
-  return tasks;
-};
-*/
-
 // Route to render the create New Task form
 router.get('/create', (req, res) => {
   res.render('createTask');
@@ -82,6 +74,27 @@ router.post('/create', async (req, res) => {
   }
 });
 
+// Route to handle creating a new task (JSON response)
+router.post('/create/json', async (req, res) => {
+  const { title, description, status } = req.body; // Extract task details from the request body
+  try {
+    const newTaskId = await createTask(title, description, status); // Call the function to create the new task
+    res.status(201).json({
+      message: 'Task created successfully!',
+      task: {
+        id: newTaskId,
+        title,
+        description,
+        status,
+      },
+    }); // Respond with the created task details
+  } catch (error) {
+    console.error('Error creating task:', error); // Log the error for debugging
+    res.status(500).json({ error: 'Failed to create task.' }); // Respond with an error message
+  }
+});
+
+
 
 // Route to fetch a task by ID
 router.get('/:id', async (req, res) => {
@@ -94,6 +107,20 @@ router.get('/:id', async (req, res) => {
   } catch (error) {
     console.error('Error fetching task:', error);
     res.status(500).send('An error occurred while fetching the task.');
+  }
+});
+
+// Route to fetch a task by ID (JSON response)
+router.get('/:id/json', async (req, res) => {
+  try {
+    const task = await getTaskById(req.params.id); // Fetch the task by ID
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' }); // Return 404 if task doesn't exist
+    }
+    res.json(task); // Return the task as a JSON response
+  } catch (error) {
+    console.error('Error fetching task:', error); // Log the error for debugging
+    res.status(500).json({ error: 'An error occurred while fetching the task.' }); // Return a generic error message
   }
 });
 
